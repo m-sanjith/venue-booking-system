@@ -6,10 +6,9 @@ function Navbar() {
   const name = localStorage.getItem("studentName");
 
   const handleLogout = () => {
-    logoutStudent();
-    navigate("/");
-  };
-
+  logoutStudent(); 
+  navigate("/", { replace: true });
+};
   return (
     <nav className="navbar">
       <div className="nav-brand">Venue Booking System</div>
