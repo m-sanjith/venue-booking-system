@@ -15,6 +15,6 @@ export class AdminNavbarComponent {
   logout() {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUsername');
-    this.router.navigate(['https://venue-booking-system.vercel.app']);
+    window.location.href = 'https://venue-booking-system-pi.vercel.app';
   }
 }
