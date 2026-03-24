@@ -16,6 +16,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:4200",
+      "https://yourdomain.com",
       process.env.CLIENT_URL,
       process.env.ADMIN_URL,
     ].filter(Boolean),
@@ -40,8 +41,9 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server running on port ${process.env.PORT || 5000}`);
+    const PORT=process.env.PORT || 5000;
+    app.listen(PORT,"0.0.0.0", () => {
+    console.log(`Server running on port ${process.env.PORT || 5000}`);
     });
   })
   .catch((err) => {

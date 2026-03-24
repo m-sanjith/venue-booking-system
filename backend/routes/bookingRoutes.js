@@ -7,11 +7,15 @@ const router = express.Router();
 
 router.post("/", verifyToken, requireStudent, async (req, res) => {
   try {
-    const { venueId, eventName, date, time, purpose } = req.body;
+    const { venueId, eventName, date, time, purpose, studentName, studentEmail } = req.body;
 
     const venue = await Venue.findById(venueId);
+
     if (!venue) {
-      return res.status(404).json({ success: false, message: "Venue not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Venue not found",
+      });
     }
 
     if (venue.status !== "Available") {
@@ -21,10 +25,23 @@ router.post("/", verifyToken, requireStudent, async (req, res) => {
       });
     }
 
+    const existingBooking = await Booking.findOne({
+      venueId,
+      date,
+      status: { $in: ["Pending", "Approved"] }
+    });
+
+    if (existingBooking) {
+      return res.status(400).json({
+        success: false,
+        message: "This venue is already booked for the selected date",
+      });
+    }
+
     const booking = await Booking.create({
       studentId: req.user.id,
-      studentName: req.body.studentName,
-      studentEmail: req.body.studentEmail,
+      studentName,
+      studentEmail,
       venueId: venue._id,
       venueName: venue.name,
       eventName,
@@ -40,9 +57,13 @@ router.post("/", verifyToken, requireStudent, async (req, res) => {
       data: booking,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 });
+
 
 router.get("/my", verifyToken, requireStudent, async (req, res) => {
   try {
@@ -66,11 +87,33 @@ router.put("/:id/status", verifyToken, requireAdmin, async (req, res) => {
   try {
     const { status } = req.body;
 
-    const booking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    );
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found",
+      });
+    }
+
+    if (status === "Approved") {
+      const existingApproved = await Booking.findOne({
+        _id: { $ne: booking._id },
+        venueId: booking.venueId,
+        date: booking.date,
+        status: "Approved",
+      });
+
+      if (existingApproved) {
+        return res.status(400).json({
+          success: false,
+          message: "Another booking for this venue is already approved on the selected date",
+        });
+      }
+    }
+
+    booking.status = status;
+    await booking.save();
 
     res.json({
       success: true,
@@ -78,7 +121,10 @@ router.put("/:id/status", verifyToken, requireAdmin, async (req, res) => {
       data: booking,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 });
 
