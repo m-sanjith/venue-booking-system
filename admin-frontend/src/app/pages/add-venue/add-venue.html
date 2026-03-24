@@ -1,0 +1,35 @@
+<div class="page">
+  <div class="topbar">
+    <h1>Add Venue</h1>
+
+    <div class="nav-actions">
+      <button type="button" class="nav-btn" (click)="goToDashboard()">Dashboard</button>
+      <button type="button" class="nav-btn" (click)="goToManageVenues()">Manage Venues</button>
+      <button type="button" class="nav-btn logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="success" *ngIf="message">{{ message }}</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <input [(ngModel)]="venueForm.name" placeholder="Venue Name" />
+    <input [(ngModel)]="venueForm.capacity" type="number" placeholder="Capacity" />
+    <input [(ngModel)]="venueForm.location" placeholder="Location" />
+    <textarea [(ngModel)]="venueForm.description" placeholder="Description"></textarea>
+
+    <input
+      type="file"
+      accept="image/*"
+      (change)="onImageSelect($event)"
+    />
+
+    <div class="image-preview" *ngIf="imagePreview">
+      <img [src]="imagePreview" alt="Venue Preview" />
+    </div>
+
+    <button type="button" class="add-btn" (click)="addVenue()" [disabled]="loading">
+      {{ loading ? 'Adding...' : 'Add Venue' }}
+    </button>
+  </div>
+</div>

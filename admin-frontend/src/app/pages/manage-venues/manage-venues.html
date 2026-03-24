@@ -1,0 +1,92 @@
+<div class="page">
+  <div class="topbar">
+    <h1>Manage Venues</h1>
+
+    <div class="nav-actions">
+      <button type="button" class="nav-btn" (click)="goToDashboard()">Dashboard</button>
+      <button type="button" class="nav-btn" (click)="goToAddVenue()">Add Venue</button>
+      <button type="button" class="nav-btn logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="success" *ngIf="message">{{ message }}</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Location</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Change Status</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let venue of venues; trackBy: trackByVenueId">
+            <td>
+              <img
+                *ngIf="venue.image"
+                [src]="venue.image"
+                alt="Venue"
+                class="venue-thumb"
+              />
+            </td>
+            <td>{{ venue.name }}</td>
+            <td>{{ venue.capacity }}</td>
+            <td>{{ venue.location }}</td>
+            <td>{{ venue.description }}</td>
+            <td>{{ venue.status }}</td>
+            <td>
+              <button
+                type="button"
+                class="action-btn"
+                [disabled]="updatingVenueId === venue._id"
+                (click)="changeVenueStatus(venue._id, 'Available')"
+              >
+                Available
+              </button>
+
+              <button
+                type="button"
+                class="action-btn"
+                [disabled]="updatingVenueId === venue._id"
+                (click)="changeVenueStatus(venue._id, 'Maintenance')"
+              >
+                Maintenance
+              </button>
+
+              <button
+                type="button"
+                class="action-btn"
+                [disabled]="updatingVenueId === venue._id"
+                (click)="changeVenueStatus(venue._id, 'Closed')"
+              >
+                Closed
+              </button>
+            </td>
+            <td>
+              <button
+                type="button"
+                class="delete-btn"
+                [disabled]="deletingVenueId === venue._id"
+                (click)="deleteVenue(venue._id)"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="venues.length === 0">
+            <td colspan="8">No venues found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

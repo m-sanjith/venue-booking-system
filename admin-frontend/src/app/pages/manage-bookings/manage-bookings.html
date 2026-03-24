@@ -1,0 +1,96 @@
+<div class="page">
+  <div class="topbar">
+    <h1>Manage Bookings</h1>
+
+    <div class="nav-actions">
+      <button type="button" class="nav-btn" (click)="goToDashboard()">Dashboard</button>
+      <button type="button" class="nav-btn" (click)="goToManageVenues()">Manage Venues</button>
+      <button type="button" class="nav-btn logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Booking Calendar View</h2>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <div class="calendar-list" *ngIf="groupedBookings.length > 0">
+      <div class="calendar-day" *ngFor="let group of groupedBookings">
+        <div class="calendar-date">{{ group.date }}</div>
+
+        <div class="calendar-booking" *ngFor="let booking of group.items">
+          <div>
+            <strong>{{ booking.time }}</strong> - {{ booking.venueName }}
+          </div>
+          <div>{{ booking.studentName }} | {{ booking.eventName }}</div>
+          <div>{{ booking.purpose }}</div>
+          <div class="status-line">
+            Status:
+            <span class="status-tag" [ngClass]="booking.status.toLowerCase()">
+              {{ booking.status }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="groupedBookings.length === 0">No bookings available.</p>
+  </div>
+
+  <div class="card">
+    <h2>Manage Bookings</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Email</th>
+            <th>Venue</th>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let booking of bookings; trackBy: trackByBookingId">
+            <td>{{ booking.studentName }}</td>
+            <td>{{ booking.studentEmail }}</td>
+            <td>{{ booking.venueName }}</td>
+            <td>{{ booking.eventName }}</td>
+            <td>{{ booking.date }}</td>
+            <td>{{ booking.time }}</td>
+            <td>{{ booking.purpose }}</td>
+            <td>{{ booking.status }}</td>
+            <td>
+              <button
+                type="button"
+                class="action-btn"
+                [disabled]="updatingBookingId === booking._id"
+                (click)="changeBookingStatus(booking._id, 'Approved')"
+              >
+                Approve
+              </button>
+
+              <button
+                type="button"
+                class="action-btn reject-btn"
+                [disabled]="updatingBookingId === booking._id"
+                (click)="changeBookingStatus(booking._id, 'Rejected')"
+              >
+                Reject
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="bookings.length === 0">
+            <td colspan="9">No bookings found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
