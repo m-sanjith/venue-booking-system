@@ -16,9 +16,9 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:4200",
-      "https://yourdomain.com",
       process.env.CLIENT_URL,
       process.env.ADMIN_URL,
+      "https://venue-booking-system-pi.vercel.app"
     ].filter(Boolean),
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
