@@ -1,6 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://api.yourdomain.com";
+const API_URL = import.meta.env.VITE_API_URL || "https://venue-booking-system-yktl.onrender.com";
 
-// Student signup
 export const registerStudent = async (studentData) => {
   const res = await fetch(`${API_URL}/api/students/signup`, {
     method: "POST",
@@ -13,7 +12,6 @@ export const registerStudent = async (studentData) => {
   return await res.json();
 };
 
-// Student login
 export const loginStudent = async (email, password) => {
   const res = await fetch(`${API_URL}/api/students/login`, {
     method: "POST",
@@ -35,7 +33,6 @@ export const loginStudent = async (email, password) => {
   return data;
 };
 
-// Student logout
 export const logoutStudent = () => {
   localStorage.removeItem("studentLoggedIn");
   localStorage.removeItem("studentToken");
@@ -43,13 +40,11 @@ export const logoutStudent = () => {
   localStorage.removeItem("studentEmail");
 };
 
-// Get all venues
 export const getVenues = async () => {
   const res = await fetch(`${API_URL}/api/venues`);
   return await res.json();
 };
 
-// Create booking request
 export const createBookingRequest = async (bookingData) => {
   const token = localStorage.getItem("studentToken");
 
