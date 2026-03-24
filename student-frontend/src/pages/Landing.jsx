@@ -1,5 +1,5 @@
 function Landing() {
-  const adminUrl = import.meta.env.VITE_ADMIN_URL || "http://localhost:4200";
+  const adminUrl = import.meta.env.VITE_ADMIN_URL || "https://venue-booking-admin.vercel.app";
 
   return (
     <div className="landing-page">
